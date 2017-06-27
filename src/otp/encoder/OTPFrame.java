@@ -345,7 +345,10 @@ public class OTPFrame extends javax.swing.JFrame {
 
     private void plainTextFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_plainTextFocusLost
         if(this.plainText.getText().equals(""))
-            this.plainText.setText("Encrypted/plaintext text");
+            this.plainText.setText("Encrypted/plaintext text goes here.  "+"This program supports encyphering on 3 types of strings: \n"
+        + "numeric, english alphabet(lowercase only, no spaces), and unicode.\n"
+        + "While you can encypher/decypher mixing key and message types, it's\n"
+        + "unstable and not recommended.");
     }//GEN-LAST:event_plainTextFocusLost
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
