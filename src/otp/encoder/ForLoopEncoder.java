@@ -8,7 +8,6 @@ package otp.encoder;
 import javax.swing.JOptionPane;
 
 /**
- *
  * @author Sir_Kibble
  * Implementation of the OTP algorithm via for loops and charat()
  * v1.1 enabled enum for encoding options eliminating possible 
