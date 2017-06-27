@@ -6,6 +6,11 @@
 package otp.encoder;
 
 //import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 /**
@@ -115,6 +120,11 @@ public class OTPFrame extends javax.swing.JFrame {
         jMenu1.setText("Menu");
 
         OpenKeyMenuOption.setText("Open key");
+        OpenKeyMenuOption.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OpenKeyMenuOptionActionPerformed(evt);
+            }
+        });
         jMenu1.add(OpenKeyMenuOption);
 
         OpenMessageMenuOption.setText("Open message");
@@ -282,6 +292,27 @@ JOptionPane.showMessageDialog(this,
         + "While you can encypher/decypher mixing key and message types, it's"
         + "unstable and not recommended"
         + "", "Instructions", JOptionPane.INFORMATION_MESSAGE);    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void OpenKeyMenuOptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenKeyMenuOptionActionPerformed
+        //opening files
+        JFileChooser FC = new JFileChooser();
+        File file;
+        int fcVal = FC.showOpenDialog(this);
+        String Key = "";
+        
+        if(fcVal == JFileChooser.APPROVE_OPTION){
+            file = FC.getSelectedFile();
+            try{
+                FileReader FR = new FileReader(file);
+                BufferedReader textReader = new BufferedReader(FR);
+                while(textReader.ready()){
+                    Key += textReader.
+                }//end while
+            }catch(IOException e){
+                
+            }//end catch
+        }//end if
+    }//GEN-LAST:event_OpenKeyMenuOptionActionPerformed
 
     /**
      * @param args the command line arguments
