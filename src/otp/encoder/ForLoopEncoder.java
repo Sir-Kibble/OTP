@@ -6,7 +6,6 @@
 package otp.encoder;
 
 import javax.swing.JOptionPane;
-import java.lang.Exception;
 
 /**
  *
