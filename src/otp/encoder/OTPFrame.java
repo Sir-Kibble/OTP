@@ -7,9 +7,21 @@ package otp.encoder;
 
 //import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -24,7 +36,8 @@ public class OTPFrame extends javax.swing.JFrame {
         this.OTPEncoder = new ForLoopEncoder();
         initComponents();
         this.AlphabetButton.setSelected(true);
-        
+        //this.plainText.setWrapStyleWord(true);
+        //this.keyText.setWrapStyleWord(true);
         //inputStorage = "";
         //outputStorage = "";
     }
@@ -52,6 +65,7 @@ public class OTPFrame extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         OpenKeyMenuOption = new javax.swing.JMenuItem();
         OpenMessageMenuOption = new javax.swing.JMenuItem();
+        SaveKeyMenuOption = new javax.swing.JMenuItem();
         SaveMessageMenuOption = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -62,9 +76,14 @@ public class OTPFrame extends javax.swing.JFrame {
         setAutoRequestFocus(false);
         setLocationByPlatform(true);
 
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
         keyText.setColumns(20);
+        keyText.setLineWrap(true);
         keyText.setRows(5);
         keyText.setText("OTP Key");
+        keyText.setToolTipText("Type/Paste key to encode or decode on here.");
+        keyText.setWrapStyleWord(true);
         keyText.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 keyTextFocusGained(evt);
@@ -75,9 +94,13 @@ public class OTPFrame extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(keyText);
 
+        jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
         plainText.setColumns(20);
+        plainText.setLineWrap(true);
         plainText.setRows(5);
         plainText.setText("Encrypted/plaintext text");
+        plainText.setWrapStyleWord(true);
         plainText.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 plainTextFocusGained(evt);
@@ -135,7 +158,20 @@ public class OTPFrame extends javax.swing.JFrame {
         });
         jMenu1.add(OpenMessageMenuOption);
 
+        SaveKeyMenuOption.setText("Save key");
+        SaveKeyMenuOption.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SaveKeyMenuOptionActionPerformed(evt);
+            }
+        });
+        jMenu1.add(SaveKeyMenuOption);
+
         SaveMessageMenuOption.setText("Save message");
+        SaveMessageMenuOption.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SaveMessageMenuOptionActionPerformed(evt);
+            }
+        });
         jMenu1.add(SaveMessageMenuOption);
         jMenu1.add(jSeparator1);
 
@@ -241,7 +277,43 @@ public class OTPFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_plainTextFocusGained
 
     private void OpenMessageMenuOptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenMessageMenuOptionActionPerformed
-        // TODO add your handling code here:
+        //opening files
+        JFileChooser FC = new JFileChooser();
+        File file;
+        int fcVal = FC.showOpenDialog(this);
+        String Key = "";
+        
+        if(fcVal == JFileChooser.APPROVE_OPTION){
+            file = FC.getSelectedFile();
+            try{
+                char str;
+                BufferedReader bufReader = new BufferedReader( new InputStreamReader(new FileInputStream(file), "UTF-8"));
+                while(bufReader.ready())
+                {
+                    str = (char) bufReader.read();
+                    Key += str;
+                }
+                /*String str;
+            BufferedReader bufReader = new BufferedReader( new InputStreamReader(new FileInputStream(file), "UTF-8"));
+            while((str=bufReader.readLine())!=null)
+            {
+                Key += str;
+            }
+                
+                /*InputStreamReader input = new InputStreamReader(new FileInputStream(file)/*, StandardCharsets.UTF_8);
+                while(input.ready()){
+                    Key += input.read();
+                }//end while
+                
+                /*BufferedReader textReader = new BufferedReader(input);
+                while(textReader.ready()){
+                    Key += textReader.read();
+                }//end while*/
+            }catch(IOException e){
+                    JOptionPane.showMessageDialog(this, "Error opening file: \n"+e.getMessage(), "File Error!", JOptionPane.ERROR_MESSAGE);
+            }//end catch
+            this.plainText.setText(Key);
+        }//end if
     }//GEN-LAST:event_OpenMessageMenuOptionActionPerformed
 
     private void EncryptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EncryptButtonActionPerformed
@@ -282,14 +354,14 @@ public class OTPFrame extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         JOptionPane.showMessageDialog(this, "Created by: Sir_Kibble, April 2016"
-                + "\n v1.1\ncontact dbdemeritt@gmail.com", "About OTP", JOptionPane.INFORMATION_MESSAGE);
+                + "\n v1.2\ncontact insomniac_66@hotmail.com", "About OTP", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
 JOptionPane.showMessageDialog(this, 
         "This program supports encyphering on 3 types of strings: \n"
         + "numeric, english alphabet(lowercase only, no spaces), and unicode.\n"
-        + "While you can encypher/decypher mixing key and message types, it's"
+        + "While you can encypher/decypher mixing key and message types, it's\n"
         + "unstable and not recommended"
         + "", "Instructions", JOptionPane.INFORMATION_MESSAGE);    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
@@ -303,16 +375,75 @@ JOptionPane.showMessageDialog(this,
         if(fcVal == JFileChooser.APPROVE_OPTION){
             file = FC.getSelectedFile();
             try{
-                FileReader FR = new FileReader(file);
-                BufferedReader textReader = new BufferedReader(FR);
-                while(textReader.ready()){
-                    Key += textReader.
+                char str;
+                BufferedReader bufReader = new BufferedReader( new InputStreamReader(new FileInputStream(file), "UTF-8"));
+                while(bufReader.ready())
+                {
+                    str = (char) bufReader.read();
+                    Key += str;
+                }
+                /*InputStreamReader input = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_16);
+                while(input.ready()){
+                    Key += input.read();
                 }//end while
-            }catch(IOException e){
                 
+                /*BufferedReader textReader = new BufferedReader(input);
+                while(textReader.ready()){
+                    Key += textReader.read();
+                }//end while*/
+            }catch(IOException e){
+                    JOptionPane.showMessageDialog(this, "Error opening file: \n"+e.getMessage(), "File Error!", JOptionPane.ERROR_MESSAGE);
             }//end catch
+            this.keyText.setText(Key);
         }//end if
     }//GEN-LAST:event_OpenKeyMenuOptionActionPerformed
+
+    private void SaveKeyMenuOptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveKeyMenuOptionActionPerformed
+        //save dialog for Key
+        JFileChooser FC = new JFileChooser();
+        File file;
+        int fcVal = FC.showSaveDialog(this);
+        String Key = this.keyText.getText();
+        
+        if(fcVal == JFileChooser.APPROVE_OPTION){
+            file = FC.getSelectedFile();
+        
+            try (Writer out = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream(FC.getSelectedFile().getAbsolutePath()+".key"), "UTF-8"))) {
+                out.write(Key);
+            } catch (IOException ex) {
+                Logger.getLogger(OTPFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            /*try {
+                FileWriter fw = new FileWriter(FC.getSelectedFile()+".txt");
+                fw.write(Key);
+            } catch(Exception e){
+            }*/
+            /*try {
+            FileWriter fw = new FileWriter(FC.getSelectedFile()+".txt");
+            fw.write(Key);
+            } catch(Exception e){
+            }*/        }
+    }//GEN-LAST:event_SaveKeyMenuOptionActionPerformed
+
+    private void SaveMessageMenuOptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveMessageMenuOptionActionPerformed
+        //save dialog for message
+        JFileChooser FC = new JFileChooser();
+        File file;
+        int fcVal = FC.showSaveDialog(this);
+        String Key = this.plainText.getText();
+        
+        if(fcVal == JFileChooser.APPROVE_OPTION){
+            file = FC.getSelectedFile();
+        
+            try (Writer out = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream(FC.getSelectedFile().getAbsolutePath()+".message"), "UTF-8"))) {
+                out.write(Key);
+            } catch (IOException ex) {
+                Logger.getLogger(OTPFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_SaveMessageMenuOptionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -357,6 +488,7 @@ JOptionPane.showMessageDialog(this,
     private javax.swing.JRadioButton NumericButton;
     private javax.swing.JMenuItem OpenKeyMenuOption;
     private javax.swing.JMenuItem OpenMessageMenuOption;
+    private javax.swing.JMenuItem SaveKeyMenuOption;
     private javax.swing.JMenuItem SaveMessageMenuOption;
     private javax.swing.JRadioButton UnicodeButton;
     private javax.swing.ButtonGroup buttonGroup1;
