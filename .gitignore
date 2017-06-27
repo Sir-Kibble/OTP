@@ -11,7 +11,8 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
+#allowing jars to be added so people don't have to compile if they don't want to.  
+#*.jar
 *.war
 *.ear
 *.zip
