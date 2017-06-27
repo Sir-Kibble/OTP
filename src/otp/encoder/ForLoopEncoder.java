@@ -51,14 +51,39 @@ public class ForLoopEncoder implements Encoder{
         String finalOutput = "";
         
         //verifying input strings.  Unicode needs no verification if it falls
-        //within Character set limits
+        //within Character set limits, vustom buttons
+        Object[] options = {"Yes, continue with encoding", "Go back"};
         if(type != EncypherType.unicode){
             if(!verifyString(plainText, type))
-                //display warning for message, prompt continue?
-                System.out.println("message has an issue");
+                n = JOptionPane.showOptionDialog(
+                    null,
+                "WARNING!  The message has a character unsuitable\n"
+                        + "for the encoding-type selected!  \n\n"
+                        + "Is the correct radiobutton selected?",
+                "Improper encoding detected!",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE,
+                null,
+                options,
+                options[1]
+                );
+            if(n==1)
+                return plainText;
             if(!verifyString(key, type))
-                //display warning for key, prompt continue?
-                System.out.println("key has an issue");
+                n = JOptionPane.showOptionDialog(
+                    null,
+                "WARNING!  The key has a character unsuitable\n"
+                        + "for the encoding-type selected!  \n\n"
+                        + "Is the correct radiobutton selected?",
+                "Improper encoding detected!",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE,
+                null,
+                options,
+                options[1]
+                );
+            if(n==1)
+                return plainText;
         }//end verification
         setEncypher(type);
         for(int x = 0; x < key.length() && x < plainText.length(); x++){
@@ -93,6 +118,42 @@ public class ForLoopEncoder implements Encoder{
         //break if user doesn't want incomplete encoding.
         if(n == 1)
             return encodedText;
+        
+        //verifying input strings.  Unicode needs no verification if it falls
+        //within Character set limits, vustom buttons
+        Object[] options = {"Yes, continue with decoding", "Go back"};
+        if(type != EncypherType.unicode){
+            if(!verifyString(encodedText, type))
+                n = JOptionPane.showOptionDialog(
+                    null,
+                "WARNING!  The message has a character unsuitable\n"
+                        + "for the decoding-type selected!  \n\n"
+                        + "Is the correct radiobutton selected?",
+                "Improper decoding detected!",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE,
+                null,
+                options,
+                options[1]
+                );
+            if(n==1)
+                return encodedText;
+            if(!verifyString(key, type))
+                n = JOptionPane.showOptionDialog(
+                    null,
+                "WARNING!  The key has a character unsuitable\n"
+                        + "for the decoding-type selected!  \n\n"
+                        + "Is the correct radiobutton selected?",
+                "Improper decoding detected!",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE,
+                null,
+                options,
+                options[1]
+                );
+            if(n==1)
+                return encodedText;
+        }//end verification
         
         setEncypher(type);
         String finalOutput = "";
