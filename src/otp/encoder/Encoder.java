@@ -7,6 +7,9 @@ package otp.encoder;
 
 /**
  * @author Sir_Kibble
+ * 
+ * An encoder must be able to encypher/decypher messages with keys based on the
+ * the three common string formats: numeric, alphabet, and unicode.  
  */
 public interface Encoder {
 
@@ -47,7 +50,8 @@ public interface Encoder {
      */
     //public void setOptions(int option1, int option2);
     
-    /**@deprecated 
+    /**@deprecated
+     * no longer supported
      */
     //public void setEncypher(EncypherType type);
 }
