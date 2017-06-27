@@ -22,7 +22,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author minimole2
+ * @author Sir_Kibble
  */
 public class OTPFrame extends javax.swing.JFrame {
     private final Encoder OTPEncoder;
