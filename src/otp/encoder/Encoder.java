@@ -6,8 +6,7 @@
 package otp.encoder;
 
 /**
- *
- * @author minimole2
+ * @author Sir_Kibble
  */
 public interface Encoder {
 
