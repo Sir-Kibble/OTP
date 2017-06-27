@@ -43,17 +43,13 @@ public class ForLoopEncoder implements Encoder{
                 options[1]
             );
         }//end if
+        
         //break if user doesn't want incomplete encoding.
         if(n == 1)
             return plainText;
         
         String finalOutput = "";
         
-        /*old warning
-        //implement option to continue here
-            JOptionPane.showMessageDialog(null, "WARNING!  The key is too short "
-                    + "to encrypt the entire message!", "Warning!", 
-                    JOptionPane.WARNING_MESSAGE);*/
         //verifying input strings.  Unicode needs no verification if it falls
         //within Character set limits
         if(type != EncypherType.unicode){
@@ -100,12 +96,6 @@ public class ForLoopEncoder implements Encoder{
         
         setEncypher(type);
         String finalOutput = "";
-        
-            /*old error message
-            JOptionPane.showMessageDialog(null, "WARNING!  The key is too short "
-                    + "to decrypt the entire message!", "Warning!", 
-                    JOptionPane.WARNING_MESSAGE);
-            */
         for(int x = 0; x < key.length() && x < encodedText.length(); x++){
             int temp = ((encodedText.charAt(x) - unicodeOffset) - (key.charAt(x) - unicodeOffset)) % characterSetSize;
             if(temp < 0){//w = 22 v = 21 u = 20 y = 24
@@ -116,13 +106,6 @@ public class ForLoopEncoder implements Encoder{
         return finalOutput;
     }//end decode
 
-    //@Override
-    /*public void setOptions(int option1, int option2) {
-        this.characterSetSize = option1;
-        this.unicodeOffset = option2;
-    }*/
-    
-    
     private void setEncypher (EncypherType type){
         if(null != type)switch (type) {
             case alphabet:
