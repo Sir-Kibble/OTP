@@ -10,7 +10,7 @@ import java.lang.Exception;
 
 /**
  *
- * @author minimole2
+ * @author Sir_Kibble
  * Implementation of the OTP algorithm via for loops and charat()
  * v1.1 enabled enum for encoding options eliminating possible 
  * errors when specifying encoding types
@@ -28,11 +28,34 @@ public class ForLoopEncoder implements Encoder{
 
     @Override
     public String encode(String plainText, String key, EncypherType type) {
+        int n = -1;
+        //checking key length before encoding
+        if(plainText.length() > key.length()){
+            //custom buttons
+            Object[] options = {"Continue with message loss", "Go back"};
+            n = JOptionPane.showOptionDialog(
+                    null,
+                "WARNING!  The key is too short\n" +
+                "to encode the entire message!  ",
+                "WARNING!",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE,
+                null,
+                options,
+                options[1]
+            );
+        }//end if
+        //break if user doesn't want incomplete encoding.
+        if(n == 1)
+            return plainText;
+        
         String finalOutput = "";
-        if(plainText.length() > key.length())//implement option to continue here
+        
+        /*old warning
+        //implement option to continue here
             JOptionPane.showMessageDialog(null, "WARNING!  The key is too short "
                     + "to encrypt the entire message!", "Warning!", 
-                    JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.WARNING_MESSAGE);*/
         //verifying input strings.  Unicode needs no verification if it falls
         //within Character set limits
         if(type != EncypherType.unicode){
@@ -55,12 +78,36 @@ public class ForLoopEncoder implements Encoder{
 
     @Override
     public String decode(String encodedText, String key, EncypherType type) {
+        int n = -1;
+        //checking key length before decoding
+        if(encodedText.length() > key.length()){
+            //Custom button text
+            Object[] options = {"Continue with message loss", "Go back"};
+                n = JOptionPane.showOptionDialog(
+                    null,
+                "WARNING!  The key is too short\n" +
+                "to decode the entire message!  ",
+                "WARNING!",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE,
+                null,
+                options,
+                options[1]
+            );
+        }//end if
+        
+        //break if user doesn't want incomplete encoding.
+        if(n == 1)
+            return encodedText;
+        
         setEncypher(type);
         String finalOutput = "";
-        if(encodedText.length() > key.length())
+        
+            /*old error message
             JOptionPane.showMessageDialog(null, "WARNING!  The key is too short "
                     + "to decrypt the entire message!", "Warning!", 
                     JOptionPane.WARNING_MESSAGE);
+            */
         for(int x = 0; x < key.length() && x < encodedText.length(); x++){
             int temp = ((encodedText.charAt(x) - unicodeOffset) - (key.charAt(x) - unicodeOffset)) % characterSetSize;
             if(temp < 0){//w = 22 v = 21 u = 20 y = 24
